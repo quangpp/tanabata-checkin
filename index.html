@@ -14,7 +14,7 @@ function check(){
     $('.loading').show();
      $('.h1-name').hide();
        $('.check').hide();
-    $.ajax({url: "https://script.google.com/macros/s/AKfycbynnPfg2BMFDZWf_atPZvshvVgXmo0Mfj7mFxIO0ughlnbyExtB-5J4cGg37AUOtyj8Yg/exec" + c, success:    function(result){
+    $.ajax({url: "https://script.google.com/macros/s/AKfycbynnPfg2BMFDZWf_atPZvshvVgXmo0Mfj7mFxIO0ughlnbyExtB-5J4cGg37AUOtyj8Yg/exec?id=" + c, success:    function(result){
    data =JSON.parse(JSON.stringify(result));
       //var $div1 = jQuery("<div id='div1' style='display:none'>"+result+"</div>");
       //jQuery("body").append($div1);
