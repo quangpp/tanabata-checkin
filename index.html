@@ -1,0 +1,265 @@
+<html>
+  <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>CHECK-IN | TANABATA FESTIVAL 2026</title>
+<link rel="icon" href="https://www.google.com/s2/favicons?domain=suleco.vn&sz=64"/>
+<script>
+  var data;
+function check(){
+   
+  var c= $('#txt-id').val();
+  if (c!="") {
+    $('.loading').show();
+     $('.h1-name').hide();
+       $('.check').hide();
+    $.ajax({url: "https://script.google.com/macros/s/AKfycbynnPfg2BMFDZWf_atPZvshvVgXmo0Mfj7mFxIO0ughlnbyExtB-5J4cGg37AUOtyj8Yg/exec" + c, success:    function(result){
+   data =JSON.parse(JSON.stringify(result));
+      //var $div1 = jQuery("<div id='div1' style='display:none'>"+result+"</div>");
+      //jQuery("body").append($div1);
+      console.log(data.length);
+      if(data.length>0) {
+        $('.loading').hide();
+         $('.h1-stt h1').removeClass('importantRule');
+         $('.check input').attr('value','CHECK-IN');
+        try {
+       
+             $('.welcome h3').html("CHÀO MỪNG BẠN ĐẾN VỚI<br>TANABATA FESTIVAL 2026br><br>");
+			 $('.h2-title h1').text(data[1] + " " + data[2]);
+            // $('.h2-title h2').text("Thương hiệu: " + data[6]);
+            // $('.lien-he h3').text("" + data[7]);
+       localStorage.setItem('checkinid',c);
+       localStorage.setItem('checkindanhxung',data[1]);
+       localStorage.setItem('checkinhoten',data[2]);
+       localStorage.setItem('checkinsdt',data[3]);
+       localStorage.setItem('hoanthanh',data[4]);
+ $('.check').show();
+          $('.checkout').show();
+    if (  localStorage.getItem('checkinstt')!=''&& localStorage.getItem('checkinstt')!='undefined') {
+      if (  localStorage.getItem('hoanthanh').length>0) {
+	  if (data[17].length!='') {
+	   $('.lien-he h3').html('Lần 1:' + ' ' + data[11] + ' (Đã hoàn thành)' + '<br>' + 'Lần 2:' + ' ' + data[17] + ' (Chờ lái thử)');
+	  } else {
+                     $('.lien-he h3').text(data[7] + ' (Stt ' + data[11] + ')');
+
+       $('.h1-stt h1').html('Đã hoàn thành!<br>Kính chúc Quý khách một ngày tốt lành.');
+       $('.h1-stt h1').addClass('importantRule');
+       // $('.check input').attr('value','CHECK-IN LÁI THỬ XE KHÁC');
+        }
+         $('.check').hide();
+      $('.checkout').show();
+    } else {
+      $('.h1-stt h1').text(data[11]);
+          $('.check').hide();
+      $('.checkout').show();
+      $('.survey').show();
+    }
+    }
+     } catch {
+       
+    }
+      } else {
+         $('.h1-name').show();
+       $('.check').hide();
+        $('.loading').hide();
+      }
+     
+  }});
+     }
+  }
+       function checkout() {
+       localStorage.setItem('checkinid','');
+       localStorage.setItem('checkindanhxung','');
+       localStorage.setItem('checkinhoten','');
+       localStorage.setItem('hoanthanh','');
+       location.href=location.pathname;
+       }
+ function checkin(){
+       $('.check').hide();
+   $('.checkout').hide();
+        $('.loading').show();
+ 
+        // $.ajax({url: "https://docs.google.com/forms/d/e/1FAIpQLSfPaZaeT6O9BK2Mq473PULMkWLQyNDrTxf4xt4hzxwDbW0gxg/formResponse?usp=pp_url&entry.1881844914="+ localStorage.getItem('checkindanhxung')+"&entry.8358915="+ localStorage.getItem('checkinhoten')+"&entry.1694764995="+ localStorage.getItem('checkinsdt')+"&entry.1376677248="+ localStorage.getItem('checkindongxe')+""}).failure();
+
+ //  location.href="https://docs.google.com/forms/d/e/1FAIpQLSfPaZaeT6O9BK2Mq473PULMkWLQyNDrTxf4xt4hzxwDbW0gxg/viewform?usp=pp_url&entry.1881844914="+ localStorage.getItem('checkindanhxung')+"&entry.8358915="+ localStorage.getItem('checkinhoten')+"&entry.1694764995="+ localStorage.getItem('checkinsdt')+"&entry.1376677248="+ localStorage.getItem('checkindongxe')+"";
+   
+ }
+  
+   function survey() {
+    $('.check').hide();
+    $('.survey').hide();
+    $('.checkout').hide();
+    $('.loading').show();
+
+    var checkinstt = localStorage.getItem('checkinstt');
+    var surveyLink = "https://docs.google.com/forms/d/e/1FAIpQLSc2nlSGgsh12ufUVolspq17-7wlJ1iMu8YLIL6MpiP7XyyXLQ/viewform?usp=pp_url&entry.1493832941=" + checkinstt +
+        "&entry.1645529580=" + localStorage.getItem('checkinhoten') +
+        "&entry.16223579=" + localStorage.getItem('checkinsdt');
+    
+    // Kiểm tra nếu checkinstt có chứa 'S' ở đầu
+    if (/^S\d+/.test(checkinstt)) {
+        surveyLink = "https://docs.google.com/forms/d/e/1FAIpQLScl1sXhqny5qrAUPnd-XfcGc2JXuhamTkjXQPPgtYQRhXRHKw/viewform?usp=pp_url&entry.575443961=" + checkinstt +
+            "&entry.1584443521=" + localStorage.getItem('checkinhoten') +
+            "&entry.215162100=" + localStorage.getItem('checkinsdt') +
+            "&entry.1114020381=" + localStorage.getItem('checkindongxe');
+    }
+    
+    location.href = surveyLink;
+}
+
+ $(document).ready(function(){
+   //loadthongtin();
+   if( localStorage.getItem('checkinid')!='') {
+      $('#txt-id').val(localStorage.getItem('checkinid'));
+     check();
+   }
+});
+  //alert(21);
+  </script>
+  <style>
+    .main {
+      width:550px;height:1000px;position:relative;margin:auto;background:url(https://drive.google.com/file/d/1wLpXE28oZXlajO3u4rRv8r9n8lo9H1OJ);background-repeat:no-repeat;    background-size: cover; 
+      max-height:100vh; overflow:hidden;background-position:center top;
+    }
+    .importantRule { font-size: 13px !important; padding: 10px 5px;    color: #daffd0;}
+
+@font-face {
+  font-family: checkin;
+  src: url('./mtr/BMWMotorradW05-Regular.woff');
+}
+    @font-face {
+  font-family: checkin;
+      font-weight:bold;
+  src: url('./mtr/BMWMotorradW05-Bold.woff');
+}
+    @font-face {
+  font-family: checkinlight;
+      font-weight:50;
+  src: url('./mtr/BMWMotorradW05-Light.woff');
+}
+        @font-face {
+  font-family: checkin;
+      font-weight:10;
+  src: url('./mtr/BMWMotorradW05-Regular.woff');
+}
+   * {
+      color:white;
+      font-family:checkin;
+     font-weight:100;
+    }
+    body {
+          padding: 0;
+    margin: 0;
+      
+    }
+    @media only screen and (max-width: 600px) {
+      .main {
+        width:100vw !important;
+        height:100vh !important;
+        max-height: 100vh !important;
+       /* max-height: calc (100vw / 9 * 20) !important;*/
+      }
+      .logo h1 {
+        font-size:16pt  !important;
+      }
+         .logo h2 {
+        font-size:9pt  !important;
+      }
+      .logo1 img {
+        width:120px !important;
+        top:20px !important;left:20px !important;
+      }
+      .logo {
+        top:110px !important;
+      }
+   
+      .h1-stt h1 {
+        font-size:60pt;
+      }
+        .h2-title h1 {
+        font-size:16pt  !important;
+          font-weight:bold  !important;
+      } 
+       
+      .h1-name input {
+        font-size:13pt !important;
+        width:70% !important;
+      }
+}
+    .h1-stt h1{
+      margin: 0;font-weight: bold;    font-size: 70pt;
+    }
+    #loginform {
+      position: absolute;
+    width: 90%;
+    margin-left: 5%;
+    padding: 30 0;
+    background: linear-gradient(to bottom, #236994db, #b54341c9);
+    border-radius: 20px;
+    top: 40vh;
+    }
+    .loading {
+      text-align:center;
+      font-size:10pt;
+      display:none;
+    }
+  </style>
+</head>
+<body>
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class='main' style=''>
+  <div class=logo1 style='position:absolute;top:40px;left:40px'>
+     
+  </div>
+    <div class=logo style='position:relative;top:0px'>
+<h1 style="text-align:center;font-weight:100;font-size: 30pt;">
+       </h1>    
+      <h2 style="text-align:center;font-weight:10;font-size: 12pt;">
+       </h2>
+  </div>
+  <div id=loginform>
+<div class='h1-name' style='width: 100%;text-align: center;  text-transform:uppercase;font-size: 11pt; '>
+  <input type="text" id='txt-id' style="width: 80%; padding: 10px;   text-align: center;color:rgb(25, 25, 25)" placeholder='Nhập Mã tham dự của quý khách'><BR><br>
+  <a onclick='check()' href='#' style='padding: 10px;    width: 69%;    margin-top: 0px;margin-bottom: 20px;text-transform:none;font-size: 10pt;    border: 1px solid white;
+    padding: 10px 0px; text-decoration: none; position:relative; display: block; left: 50%; transform: translate(-50%, 0);'><i></i>CHECK-IN</a><BR>	
+  <!--<input type='button' value='CHECK-IN' style='    background-color: rgb(28, 105, 212);padding: 10px;width: 80%;margin-top: 20px;margin-bottom: 20px;' onclick='check()'><br>-->
+
+  </div>
+ 
+  <div class='h2-title' style='width: 100%;text-align: center;margin: 0;     padding-top: 0px;   font-size: 13pt;    ;'>
+    <div class='welcome' style='width: 100%;text-align: center;margin: 0;    font-size: 9pt;   ' >
+      <h3  style='margin: 0;font-size: 12pt;'>  </h3>
+    </div>
+      <h1 style='margin: 0; text-transform: uppercase;'>  </h1>
+      <h2  style='margin: 0;font-size: 14pt;'>  </h2>
+    <div class='lien-he' style='width: 100%;text-align: center;margin: 0;    font-size: 9pt;   ' >
+      <h3  style='margin: 0;font-size: 12pt;'>  </h3>
+    </div>
+	<div class='khung-gio' style='width: 100%;text-align: center;margin: 0;    font-size: 9pt;   ' >
+      <h3  style='margin: 0;font-size: 10pt;'>  </h3>
+    </div>
+    </div>
+ <div class='h1-stt' style='width: 100%;text-align: center;margin: 0;     font-size: 36pt;   '>
+      <h1 style=''>  </h1>
+  </div>
+   
+  
+  <div class='loading' style='text-align:center;display:none; '><h2>ĐANG KIỂM TRA...</h2></div>
+   <div style='text-align:center;display:none' class='check' />
+   <input type='button' value='CHECK-IN' style='    background-color: rgb(28, 105, 212);    padding: 10px;    width: 60%;    margin-top: 30px;margin-bottom: 10px;' onclick='checkin()'><br>
+  </div>
+  <!--<div style='text-align:center; position: relative; display:none' class='survey' />
+   <!--<input type='button' value='Đánh giá về chương trình' style='    background-color: rgb(28, 105, 212);    padding: 10px;    width: 60%;    margin-top: 30px;margin-bottom: 10px;' onclick='survey()'><br>-->
+   <!--<br><a onclick='survey()' href='#' style='padding: 10px;    width: 50%;    margin-top: 0px;margin-bottom: 20px;text-transform:none;font-size: 10pt;    border: 1px solid #ffffff; padding: 10px 10px; text-decoration: none; position: relative; transform: translate(-50%,0%); left: 50%; display: block; background-color: #0065ac;'><i></i>Đánh giá về chương trình</a>
+  </div>-->
+  <div style='text-align:center;display:none; position: relative; padding-top: 10px;' class='checkout' />
+        
+    <a onclick='checkout()' href='#' style='padding: 10px;    width: 50%;    margin-top: 0px;text-transform:none;font-size: 10pt;    border: 1px solid white; padding: 10px 10px; text-decoration: none; position: relative; transform: translate(-50%,0%); left: 50%; display: block'><i></i>QUAY LẠI</a>
+  
+  </div>
+</div>
+</div>
+</body>
+
+</html>
